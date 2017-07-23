@@ -15,3 +15,7 @@ and part which does use graphql
 
 limitation of coupled approach
 because graphql and passport don't work well together
+
+## Coupling
+DOn't stuff authentication logic in mutation
+rather outside helper functions handle this
