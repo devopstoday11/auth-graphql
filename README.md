@@ -43,3 +43,10 @@ so we can trick login and signin form to being aware of state
 
 associate form with user query
 when user finishes, then we send to dashboard
+
+# higher order components
+These get code reusability
+we take something, compose it together
+and it gets additional amount of functionality
+
+**enhanced or composed** components
