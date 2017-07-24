@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
-import query from '../queries/CurrentUser';
+import { Link } from 'react-router';
 
-// query to get user that is currently signed in
+import query from '../queries/CurrentUser';
+import mutation from '../mutations/Logout';
 
 class Header extends Component {
+
+  onLogoutClick() {
+    this.props.mutate({
+      refetchQueries: [{ query }]
+    }); //by default logs out user
+  }
+
+  // query to get user that is currently signed in
   renderButtons() {
     const { loading, user } = this.props.data;
 
@@ -12,11 +21,15 @@ class Header extends Component {
 
     console.log(user)
     if (user) {
-      return <div>Logout</div>
+      // using a to get styling
+      return (
+      <li><a onClick={this.onLogoutClick.bind(this)}>Logout</a></li>
+      );
     } else {
       return (
         <div>
-          Sign In / Login
+          <li><Link to="/signup">Sign Up</Link></li>
+          <li><Link to="/login">Login</Link></li>          
         </div>
       );
     }
@@ -28,11 +41,18 @@ class Header extends Component {
     return (
       <nav >
         <div className="nav-wrapper">
-          {this.renderButtons()}
+          <Link to="/" className="brand-logo left">
+            Home
+          </Link>
+          <ul className="right">
+            {this.renderButtons()}
+          </ul>
         </div>
       </nav>
     );
   };
 }
 
-export default graphql(query)(Header);
+export default graphql(mutation)(
+  graphql(query)(Header)
+);
