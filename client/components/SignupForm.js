@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
+import { hashHistory } from 'react-router';
 
 import AuthForm from './AuthForm';
 import mutation from '../mutations/Signup.js';
@@ -11,6 +12,18 @@ class SignupForm extends Component {
 
     this.state = {
       errors:[]
+    }
+  }
+
+  // to handle race conditions with graphql refetch queries
+  // and mutation promises
+  componentWillUpdate(nextProps) {
+    // approach of rerender step
+    const { user } = this.props.data;
+    const userWasJustAdded = !user && nextProps.data.user;
+
+    if (userWasJustAdded) {
+      hashHistory.push('/dashboard');
     }
   }
 
@@ -38,4 +51,6 @@ class SignupForm extends Component {
   };
 }
 
-export default graphql(mutation)(SignupForm);
+export default graphql(query)(
+  graphql(mutation)(SignupForm)
+);
